@@ -1,4 +1,7 @@
+use num::Float;
 
-pub trait Variation {
-    fn apply(&self, x: f64, y: f64) -> (f64, f64);
+use super::Point;
+
+pub trait Variation<Scalar: Float> {
+    fn apply(&self, point: Point<Scalar>) -> Point<Scalar>;
 }

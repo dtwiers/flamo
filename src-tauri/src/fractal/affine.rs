@@ -1,18 +1,22 @@
+use num::Float;
+
+use super::Point;
+
 
 #[derive(Clone, Copy, Debug)]
-pub struct Affine {
-    pub a: f64,
-    pub b: f64,
-    pub c: f64,
-    pub d: f64,
-    pub e: f64,
-    pub f: f64,
+pub struct Affine<Scalar: Float> {
+    pub a: Scalar,
+    pub b: Scalar,
+    pub c: Scalar,
+    pub d: Scalar,
+    pub e: Scalar,
+    pub f: Scalar,
 }
 
-impl Affine {
-    pub fn apply(&self, x: f64, y: f64) -> (f64, f64) {
-        let x1 = self.a * x + self.b * y + self.e;
-        let y1 = self.c * x + self.d * y + self.f;
-        (x1, y1)
+impl<Scalar: Float> Affine<Scalar> {
+    pub fn apply(&self, point: Point<Scalar>) -> Point<Scalar> {
+        let x1 = self.a * point.x + self.b * point.y + self.e;
+        let y1 = self.c * point.x + self.d * point.y + self.f;
+        Point::new(x1, y1)
     }
 }

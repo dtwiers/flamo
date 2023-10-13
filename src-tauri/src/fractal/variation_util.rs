@@ -1,24 +1,18 @@
+use num::Float;
 use std::f64::consts::PI;
 
-use rand::distributions::{Bernoulli, Distribution};
+use rand::Rng;
 
-pub struct VariationUtil {
-    bernoulli: Bernoulli,
-    rng: rand::rngs::ThreadRng,
+pub fn omega<Scalar: Float>() -> Scalar {
+    let rndbool = rand::thread_rng().gen::<u8>() & 1 == 1;
+    Scalar::from(rndbool as i32).unwrap() * Scalar::from(PI).unwrap()
 }
 
-impl VariationUtil {
-    pub fn new() -> Self {
-        Self {
-            bernoulli: Bernoulli::new(0.5).unwrap(),
-            rng: rand::thread_rng(),
-        }
-    }
-    pub fn omega(&mut self) -> f64 {
-        let switch = self.bernoulli.sample(&mut self.rng);
-        match switch {
-            true => PI,
-            false => 0.0,
-        }
-    }
+pub fn alpha<Scalar: Float>() -> Scalar {
+    let rndbool = rand::thread_rng().gen::<u8>() & 1 == 1;
+    Scalar::from(rndbool as i32 * 2 - 1).unwrap()
+}
+
+pub fn psi<Scalar: Float>() -> Scalar {
+    Scalar::from(rand::thread_rng().gen_range(0.0..1.0)).unwrap()
 }
