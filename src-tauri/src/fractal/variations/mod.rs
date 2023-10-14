@@ -322,8 +322,6 @@ pub struct PowerVariation<Scalar: Float> {
 
 impl<Scalar: Float> Variation<Scalar> for PowerVariation<Scalar> {
     fn apply(&self, point: Point<Scalar>) -> Point<Scalar> {
-        let x = point.x;
-        let y = point.y;
         let r = point.r();
         let theta = point.theta();
         let magnitude = r.powf(theta.sin());
@@ -356,8 +354,6 @@ pub struct RingsVariation<Scalar: Float> {
 
 impl<Scalar: Float> Variation<Scalar> for RingsVariation<Scalar> {
     fn apply(&self, point: Point<Scalar>) -> Point<Scalar> {
-        let x = point.x;
-        let y = point.y;
         let r = point.r();
         let theta = point.theta();
         let two = Scalar::one() + Scalar::one();
@@ -452,7 +448,6 @@ pub struct Fan2Variation<Scalar: Float> {
 
 impl<Scalar: Float> Variation<Scalar> for Fan2Variation<Scalar> {
     fn apply(&self, point: Point<Scalar>) -> Point<Scalar> {
-        let r = point.r();
         let theta = point.theta();
         let two = Scalar::one() + Scalar::one();
         let pi = Scalar::from::<f64>(PI).unwrap();
@@ -623,8 +618,7 @@ pub struct BlurVariation<Scalar: Float> {
 }
 
 impl<Scalar: Float> Variation<Scalar> for BlurVariation<Scalar> {
-    fn apply(&self, point: Point<Scalar>) -> Point<Scalar> {
-        let pi = Scalar::from::<f64>(PI).unwrap();
+    fn apply(&self, _: Point<Scalar>) -> Point<Scalar> {
         let psi1 = psi();
         let psi2 = psi();
         let two = Scalar::one() + Scalar::one();
@@ -855,7 +849,6 @@ pub struct SecantVariation<Scalar: Float> {
 impl<Scalar: Float> Variation<Scalar> for SecantVariation<Scalar> {
     fn apply(&self, point: Point<Scalar>) -> Point<Scalar> {
         let x = point.x;
-        let y = point.y;
         let weight = self.weight;
         let r = point.r();
         let y1 = (weight * (weight * r).cos()).recip();
