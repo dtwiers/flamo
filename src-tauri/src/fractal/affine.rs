@@ -3,7 +3,7 @@ use num::Float;
 use super::Point;
 
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize)]
 pub struct Affine<Scalar: Float> {
     pub a: Scalar,
     pub b: Scalar,

@@ -16,3 +16,12 @@ pub fn alpha<Scalar: Float>() -> Scalar {
 pub fn psi<Scalar: Float>() -> Scalar {
     Scalar::from(rand::thread_rng().gen_range(0.0..1.0)).unwrap()
 }
+
+pub fn gaussian_estimate<Scalar: Float>() -> Scalar {
+    let two = Scalar::one() + Scalar::one();
+    let mut value = Scalar::zero();
+    for _ in 0..4 {
+        value = value + psi();
+    }
+    value - two
+}
