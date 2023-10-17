@@ -3,7 +3,7 @@ use core::panic;
 use num::Float;
 use rand::Rng;
 
-use super::{variations::*, Affine, Variation, WeightedVariation};
+use super::{variations::*, Affine, Variation};
 
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub struct ComputeParameters<Scalar: Float> {

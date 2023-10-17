@@ -1,7 +1,7 @@
 use num::Float;
 use std::ops::{Add, Div, Mul};
 
-use super::{color::Color, render::RenderParameters};
+use super::{color::Color, BoundingBox};
 
 #[derive(Clone, Debug)]
 pub struct Point<Scalar: Float> {
@@ -31,6 +31,12 @@ impl<Scalar: Float> Point<Scalar> {
         self.x.atan2(self.y)
     }
 
+    pub fn is_in_bounds(&self, bounding_box: BoundingBox) -> bool {
+        return self.x.to_f64().unwrap() >= bounding_box.x_min
+            && self.x.to_f64().unwrap() <= bounding_box.x_max
+            && self.y.to_f64().unwrap() >= bounding_box.y_min
+            && self.y.to_f64().unwrap() <= bounding_box.y_max;
+    }
 }
 
 impl<Scalar: Float> Mul<Scalar> for Point<Scalar> {
