@@ -2,6 +2,8 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 #![allow(dead_code)]
 
+use tauri::{AboutMetadata, Menu, MenuItem, Submenu};
+
 mod fractal;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
@@ -11,8 +13,31 @@ fn greet(name: &str) -> String {
 }
 
 fn main() {
+    let file_submenu = Submenu::new(
+        "File",
+        Menu::new()
+            .add_native_item(MenuItem::Quit)
+    );
+    let about_submenu = Submenu::new(
+        "About",
+        Menu::new()
+            .add_native_item(MenuItem::About(
+                "Flamo".to_string(),
+                AboutMetadata::new()
+                    .version(env!("CARGO_PKG_VERSION"))
+                    .authors(vec!["Derek Wiers".to_string()])
+                    .comments("A fractal flame generator")
+                    .license("GPL"),
+            ))
+    );
+
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![greet])
+        .menu(
+            Menu::new()
+                .add_submenu(file_submenu)
+                .add_submenu(about_submenu),
+        )
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
