@@ -1,13 +1,14 @@
 use crossbeam::channel::unbounded;
+use image::RgbaImage;
 use std::{sync::Arc, thread};
 
-use super::{render::RenderParameters, Color, Point};
+use super::{render::RenderParameters, Color, Point, image_matrix::ImageMatrix};
 
 pub fn render_image(
     render_parameters: &RenderParameters,
     thread_count: u32,
     update_progress: Box<dyn Fn(u16) + Send>,
-) -> Result<(), String> {
+) -> Result<RgbaImage, String> {
     let render_parameters = Arc::new(render_parameters.clone());
     let (tx, rx) = unbounded();
 
@@ -33,14 +34,16 @@ pub fn render_image(
 
     let mut counter = 0f64;
     let f_point_count = point_count as f64;
+    let mut image_matrix = ImageMatrix::new(render_parameters.width, render_parameters.height);
 
     while let Ok(point) = rx.recv() {
         let (x, y) = render_parameters.get_coordinates(&point);
         let color = point.color;
         update_progress((counter / f_point_count * 65535.0) as u16);
         counter += 1.0;
+        image_matrix.plot_point(x, y, color);
     }
-    Ok(())
+    Ok(image_matrix.into())
 }
 
 fn init_point(render_parameters: &RenderParameters) -> Point<f64> {
