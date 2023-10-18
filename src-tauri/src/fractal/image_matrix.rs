@@ -1,4 +1,4 @@
-use image::{RgbImage, RgbaImage};
+use image::RgbaImage;
 use rayon::prelude::*;
 
 use super::Color;
@@ -63,15 +63,18 @@ impl ImageMatrix {
     }
 
     pub fn plot_point(&mut self, x: u32, y: u32, color: Color<f64>) {
+        println!("Plotting point ({}, {})", x, y);
         let pixel = &mut self.pixels[y as usize][x as usize];
 
         let r = (color.red * 255.0) as u64;
         let g = (color.green * 255.0) as u64;
         let b = (color.blue * 255.0) as u64;
+        println!("Adding point ({}, {}, {}) to pixel", r, g, b);
         *pixel = pixel.add_point(r, g, b);
     }
 
     pub fn normalize(&mut self) {
+        println!("Normalizing image");
         let max_count = self
             .pixels
             .par_iter()
@@ -79,11 +82,13 @@ impl ImageMatrix {
             .max()
             .unwrap();
         let normalization_factor = max_count * 255;
+        println!("Normalization factor: {}", normalization_factor);
         self.pixels.par_iter_mut().for_each(|row| {
             row.par_iter_mut().for_each(|pixel| {
                 pixel.normalize(normalization_factor);
             });
         });
+        println!("Image normalized");
         self.is_normalized = true;
     }
 }

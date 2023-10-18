@@ -1,8 +1,9 @@
 use crossbeam::channel::unbounded;
 use image::RgbaImage;
+use rand::{thread_rng, Rng};
 use std::{sync::Arc, thread};
 
-use super::{render::RenderParameters, Color, Point, image_matrix::ImageMatrix};
+use super::{image_matrix::ImageMatrix, render::RenderParameters, Color, Point};
 
 pub fn render_image(
     render_parameters: &RenderParameters,
@@ -16,20 +17,20 @@ pub fn render_image(
         * (render_parameters.height as u64)
         * (render_parameters.quality as u64);
     let points_per_thread = point_count / (thread_count as u64);
-
+    println!(
+        "Rendering {} points per thread, {} threads",
+        points_per_thread, thread_count
+    );
     (0..thread_count)
         .map(|_| init_point(&render_parameters))
         .for_each(|initial_point| {
-            thread::scope(|t| {
-                t.spawn(|| {
-                    let mut point = initial_point.clone();
-                    let render_parameters = render_parameters.as_ref();
-                    for _ in 0..points_per_thread {
-                        point = compute_point(render_parameters, point);
-                        tx.send(point.clone()).unwrap();
-                    }
-                });
-            });
+            let mut point = initial_point.clone();
+            let render_parameters = render_parameters.as_ref();
+            println!("Rendering thread started");
+            for _ in 0..points_per_thread {
+                point = compute_point(render_parameters, point, false);
+                tx.send(point.clone()).unwrap();
+            }
         });
 
     let mut counter = 0f64;
@@ -37,19 +38,23 @@ pub fn render_image(
     let mut image_matrix = ImageMatrix::new(render_parameters.width, render_parameters.height);
 
     while let Ok(point) = rx.recv() {
+        println!("Rendering point {}/{}", counter, f_point_count);
         let (x, y) = render_parameters.get_coordinates(&point);
         let color = point.color;
         update_progress((counter / f_point_count * 65535.0) as u16);
         counter += 1.0;
         image_matrix.plot_point(x, y, color);
     }
+    println!("Rendering complete");
+
     Ok(image_matrix.into())
 }
 
 fn init_point(render_parameters: &RenderParameters) -> Point<f64> {
+    println!("Initializing point");
     let mut point = Point::new(
-        0.0,
-        0.0,
+        thread_rng().gen_range(-1.0..1.0),
+        thread_rng().gen_range(-1.0..1.0),
         Color {
             red: 0.0,
             green: 0.0,
@@ -57,16 +62,18 @@ fn init_point(render_parameters: &RenderParameters) -> Point<f64> {
         },
     );
     for _ in 0..20 {
-        point = compute_point(render_parameters, point);
+        point = compute_point(render_parameters, point, true);
     }
+    println!("Initialized point: {:?}", point);
     point
 }
 
 const ESCAPE_ITERATIONS: u32 = 1000;
 
-fn compute_point(render_parameters: &RenderParameters, point: Point<f64>) -> Point<f64> {
+fn compute_point(render_parameters: &RenderParameters, point: Point<f64>, ignore_bounds: bool) -> Point<f64> {
     let mut new_point = point.clone();
     let mut counter = 0;
+    println!("Computing point");
     loop {
         counter += 1;
         let variation = render_parameters.compute_parameters.choose();
@@ -78,10 +85,14 @@ fn compute_point(render_parameters: &RenderParameters, point: Point<f64>) -> Poi
             .compute_parameters
             .post_transform
             .apply(&new_point);
-        if new_point.is_in_bounds(super::BoundingBox::default()) {
+        println!("Point: {:?}", new_point);
+        if ignore_bounds || new_point.is_in_bounds(super::BoundingBox::default()) {
             return new_point;
+        } else {
+            println!("Point escaped: {:?}", new_point);
         }
         if counter > ESCAPE_ITERATIONS {
+            println!("Point escaped, resetting");
             new_point = init_point(&render_parameters);
             counter = 0;
         }

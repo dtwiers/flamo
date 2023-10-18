@@ -5,7 +5,7 @@ mod point;
 mod render;
 mod variation;
 pub mod variation_util;
-mod variations;
+pub mod variations;
 pub mod application;
 mod bounding_box;
 mod image_matrix;

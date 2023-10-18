@@ -5,10 +5,10 @@ use rand::Rng;
 
 use super::{variations::*, Affine, Variation};
 
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize, Default)]
 pub struct ComputeParameters<Scalar: Float> {
     pub total_weight: Option<Scalar>,
-    pub final_variation: FinalVariation<Scalar>,
+    pub final_variation: Option<FinalVariation<Scalar>>,
     pub post_transform: Affine<Scalar>,
     pub linear: LinearVariation<Scalar>,
     pub sinusoidal: SinusoidalVariation<Scalar>,

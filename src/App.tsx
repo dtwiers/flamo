@@ -1,15 +1,14 @@
-import { createSignal } from 'solid-js';
+import { Show, createSignal } from 'solid-js';
 // import logo from "./assets/flamo-logo.svg";
 import { invoke } from '@tauri-apps/api/tauri';
 import './App.css';
 
 function App() {
-  const [greetMsg, setGreetMsg] = createSignal('');
-  const [name, setName] = createSignal('');
+  const [imgsrc, setImgsrc] = createSignal('');
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    setGreetMsg(await invoke('greet', { name: name() }));
+  async function getImg() {
+    setImgsrc('');
+    setImgsrc(await invoke('make_image'));
   }
 
   return (
@@ -20,22 +19,13 @@ function App() {
         <img src='/flamo-logo.svg' class='logo' alt='Flamo logo' />
       </div>
 
-      <form
-        class='row'
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id='greet-input'
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder='Enter a name...'
-        />
-        <button type='submit'>Greet</button>
-      </form>
+      <button onClick={getImg}>Get Image</button>
 
-      <p>{greetMsg()}</p>
+      <div class='row'>
+        <Show when={imgsrc()}>
+          <img src={imgsrc()} alt='Image' />
+        </Show>
+      </div>
     </div>
   );
 }

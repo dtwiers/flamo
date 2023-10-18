@@ -10,7 +10,7 @@ use super::{
     Affine, Point, Variation,
 };
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct LinearVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -21,7 +21,7 @@ variation!(LinearVariation, Scalar, self, point, {
     Point::new(point.x, point.y, point.color.merge(&self.color))
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct SinusoidalVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -32,7 +32,7 @@ variation!(SinusoidalVariation, Scalar, self, point, {
     Point::new(point.x.sin(), point.y.sin(), point.color.merge(&self.color))
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct SphericalVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -44,7 +44,7 @@ variation!(SphericalVariation, Scalar, self, point, {
     Point::new(point.x, point.y, point.color.merge(&self.color)) / r_squared
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct SwirlVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -62,7 +62,7 @@ variation!(SwirlVariation, Scalar, self, point, {
     )
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct HorseshoeVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -81,7 +81,7 @@ variation!(HorseshoeVariation, Scalar, self, point, {
     ) / r
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct PolarVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -99,7 +99,7 @@ variation!(PolarVariation, Scalar, self, point, {
     )
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct HandkerchiefVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -114,7 +114,7 @@ variation!(HandkerchiefVariation, Scalar, self, point, {
     Point::new(x, y, point.color.merge(&self.color)) * r
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct HeartVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -129,7 +129,7 @@ variation!(HeartVariation, Scalar, self, point, {
     Point::new(x, y, point.color.merge(&self.color)) * r
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct DiscVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -145,7 +145,7 @@ variation!(DiscVariation, Scalar, self, point, {
     Point::new(x, y, point.color.merge(&self.color)) * (theta / pi)
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct SpiralVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -160,7 +160,7 @@ variation!(SpiralVariation, Scalar, self, point, {
     Point::new(x, y, point.color.merge(&self.color)) / r
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct HyperbolicVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -175,7 +175,7 @@ variation!(HyperbolicVariation, Scalar, self, point, {
     Point::new(x, y, point.color.merge(&self.color))
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct DiamondVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -190,7 +190,7 @@ variation!(DiamondVariation, Scalar, self, point, {
     Point::new(x, y, point.color.merge(&self.color))
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct ExVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -207,7 +207,7 @@ variation!(ExVariation, Scalar, self, point, {
     Point::new(x, y, point.color.merge(&self.color)) * r
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct JuliaVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -225,7 +225,7 @@ variation!(JuliaVariation, Scalar, self, point, {
     Point::new(x, y, point.color.merge(&self.color)) * r.sqrt()
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct BentVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -241,7 +241,7 @@ variation!(BentVariation, Scalar, self, point, {
     Point::new(x1, y1, point.color.merge(&self.color))
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct WavesVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -258,7 +258,7 @@ variation!(WavesVariation, Scalar, self, point, {
     Point::new(x1, y1, point.color.merge(&self.color))
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct FisheyeVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -274,7 +274,7 @@ variation!(FisheyeVariation, Scalar, self, point, {
     Point::new(x, y, point.color.merge(&self.color)) * r / two
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct PopcornVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -290,7 +290,7 @@ variation!(PopcornVariation, Scalar, self, point, {
     Point::new(x, y, point.color.merge(&self.color))
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct ExponentialVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -307,7 +307,7 @@ variation!(ExponentialVariation, Scalar, self, point, {
     Point::new(inner.cos(), inner.sin(), point.color.merge(&self.color)) * e_to_x
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct PowerVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -321,7 +321,7 @@ variation!(PowerVariation, Scalar, self, point, {
     Point::new(theta.cos(), theta.sin(), point.color.merge(&self.color)) * magnitude
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct CosineVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -337,7 +337,7 @@ variation!(CosineVariation, Scalar, self, point, {
     Point::new(x1, y1, point.color.merge(&self.color))
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct RingsVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -353,7 +353,7 @@ variation!(RingsVariation, Scalar, self, point, {
     Point::new(theta.cos(), theta.sin(), point.color.merge(&self.color)) * magnitude
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct FanVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -382,7 +382,7 @@ variation!(FanVariation, Scalar, self, point, {
     }
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct BlobVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -403,7 +403,7 @@ variation!(BlobVariation, Scalar, self, point, {
     Point::new(theta.cos(), theta.sin(), point.color.merge(&self.color)) * magnitude
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct PDJVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -426,7 +426,7 @@ variation!(PDJVariation, Scalar, self, point, {
     Point::new(x1, y1, point.color.merge(&self.color))
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct Fan2Variation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -456,7 +456,7 @@ variation!(Fan2Variation, Scalar, self, point, {
     }
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct Rings2Variation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -473,7 +473,7 @@ variation!(Rings2Variation, Scalar, self, point, {
     Point::new(theta.sin(), theta.cos(), point.color.merge(&self.color)) * t
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct EyefishVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -487,7 +487,7 @@ variation!(EyefishVariation, Scalar, self, point, {
     Point::new(point.x, point.y, point.color.merge(&self.color)) * magnitude
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct BubbleVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -501,7 +501,7 @@ variation!(BubbleVariation, Scalar, self, point, {
     Point::new(point.x, point.y, point.color.merge(&self.color)) * magnitude
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct CylinderVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -512,7 +512,7 @@ variation!(CylinderVariation, Scalar, self, point, {
     Point::new(point.x.sin(), point.y, point.color.merge(&self.color))
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct PerspectiveVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -530,7 +530,7 @@ variation!(PerspectiveVariation, Scalar, self, point, {
     Point::new(x, y * angle.cos(), point.color.merge(&self.color)) * magnitude
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct NoiseVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -549,7 +549,7 @@ variation!(NoiseVariation, Scalar, self, point, {
     Point::new(x1, y1, point.color.merge(&self.color)) * psi1
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct JuliaNVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -570,7 +570,7 @@ variation!(JuliaNVariation, Scalar, self, point, {
     Point::new(t.cos(), t.sin(), point.color.merge(&self.color)) * magnitude
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct JuliaScopeVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -591,7 +591,7 @@ variation!(JuliaScopeVariation, Scalar, self, point, {
     Point::new(t.cos(), t.sin(), point.color.merge(&self.color)) * magnitude
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct BlurVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -607,7 +607,7 @@ variation!(BlurVariation, Scalar, self, point, {
     Point::new(inner.cos(), inner.sin(), point.color.merge(&self.color)) * psi1
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct GaussianVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -622,7 +622,7 @@ variation!(GaussianVariation, Scalar, self, point, {
     Point::new(inner.cos(), inner.sin(), point.color.merge(&self.color)) * gaussian
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct RadialBlurVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -645,7 +645,7 @@ variation!(RadialBlurVariation, Scalar, self, point, {
     Point::new(x1, y1, point.color.merge(&self.color)) * (self.weight.recip())
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct PieVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -667,7 +667,7 @@ variation!(PieVariation, Scalar, self, point, {
     Point::new(t2.cos(), t2.sin(), point.color.merge(&self.color)) * psi()
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct NgonVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -691,7 +691,7 @@ variation!(NgonVariation, Scalar, self, point, {
     Point::new(point.x, point.y, point.color.merge(&self.color)) * k
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct CurlVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -715,7 +715,7 @@ variation!(CurlVariation, Scalar, self, point, {
     Point::new(x1, y1, point.color.merge(&self.color)) * magnitude
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct RectanglesVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -736,7 +736,7 @@ variation!(RectanglesVariation, Scalar, self, point, {
     Point::new(x1, y1, point.color.merge(&self.color))
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct ArchVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -752,7 +752,7 @@ variation!(ArchVariation, Scalar, self, point, {
     Point::new(x1, y1, point.color.merge(&self.color))
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct TangentVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -770,7 +770,7 @@ variation!(TangentVariation, Scalar, self, point, {
     )
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct SquareVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -786,7 +786,7 @@ variation!(SquareVariation, Scalar, self, point, {
     )
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct RaysVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -803,7 +803,7 @@ variation!(RaysVariation, Scalar, self, point, {
     Point::new(x.cos(), y.sin(), point.color.merge(&self.color)) * magnitude
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct BladeVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -822,7 +822,7 @@ variation!(BladeVariation, Scalar, self, point, {
     ) * x
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct SecantVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -837,7 +837,7 @@ variation!(SecantVariation, Scalar, self, point, {
     Point::new(x, y1, point.color.merge(&self.color))
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct TwintrianVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
@@ -855,7 +855,7 @@ variation!(TwintrianVariation, Scalar, self, point, {
     Point::new(t, y1, point.color.merge(&self.color)) * x
 });
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, Default)]
 pub struct CrossVariation<Scalar: Float> {
     pub affine: Affine<Scalar>,
     pub weight: Scalar,
