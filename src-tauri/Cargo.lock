@@ -782,6 +782,7 @@ dependencies = [
  "base64 0.21.4",
  "crossbeam",
  "image",
+ "log",
  "nalgebra",
  "num",
  "pretty_env_logger",

@@ -28,6 +28,7 @@ impl ImageMatrixPixel {
         self.r /= factor;
         self.g /= factor;
         self.b /= factor;
+        self.point_count /= factor;
     }
 }
 
@@ -63,18 +64,17 @@ impl ImageMatrix {
     }
 
     pub fn plot_point(&mut self, x: u32, y: u32, color: Color<f64>) {
-        println!("Plotting point ({}, {})", x, y);
         let pixel = &mut self.pixels[y as usize][x as usize];
 
         let r = (color.red * 255.0) as u64;
         let g = (color.green * 255.0) as u64;
         let b = (color.blue * 255.0) as u64;
-        println!("Adding point ({}, {}, {}) to pixel", r, g, b);
         *pixel = pixel.add_point(r, g, b);
+        // trace!("pixel added");
     }
 
     pub fn normalize(&mut self) {
-        println!("Normalizing image");
+        info!("Normalizing image");
         let max_count = self
             .pixels
             .par_iter()
@@ -82,13 +82,13 @@ impl ImageMatrix {
             .max()
             .unwrap();
         let normalization_factor = max_count * 255;
-        println!("Normalization factor: {}", normalization_factor);
+        debug!("Normalization factor: {}", normalization_factor);
         self.pixels.par_iter_mut().for_each(|row| {
             row.par_iter_mut().for_each(|pixel| {
                 pixel.normalize(normalization_factor);
             });
         });
-        println!("Image normalized");
+        info!("Image normalized");
         self.is_normalized = true;
     }
 }
@@ -101,7 +101,7 @@ impl Into<image::RgbaImage> for ImageMatrix {
                 let r = pixel.r as u8;
                 let g = pixel.g as u8;
                 let b = pixel.b as u8;
-                let a = 255;
+                let a = pixel.point_count as u8;
                 img.put_pixel(x as u32, y as u32, image::Rgba([r, g, b, a]));
             }
         }

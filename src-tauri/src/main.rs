@@ -3,12 +3,13 @@
 #![allow(dead_code)]
 
 use std::io::Cursor;
-
 use tauri::{AboutMetadata, Menu, MenuItem, Submenu};
 
 use crate::fractal::{ComputeParameters, RenderParameters};
 use base64::prelude::*;
 mod fractal;
+#[macro_use]
+extern crate log;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
@@ -20,13 +21,21 @@ fn greet(name: &str) -> String {
 fn make_image() -> String {
     let mut compute_parameters = ComputeParameters::default();
     compute_parameters.linear.weight = 1.0;
+    compute_parameters.linear.color.blue = 0.5;
+    compute_parameters.square.weight = 0.1;
+    compute_parameters.square.color.red = 0.5;
+    compute_parameters.bubble.weight = 0.5;
+    compute_parameters.bubble.color.green = 0.5;
+    compute_parameters.cross.weight = 1.0;
+    compute_parameters.cross.color.blue = 0.7;
+    compute_parameters.cross.color.green = 0.8;
     // compute_parameters.spiral.weight = 1.0;
     let compute_parameters = compute_parameters.init_weight();
     let img = fractal::application::render_image(
         &RenderParameters {
-            width: 1,
-            height: 1,
-            quality: 1,
+            width: 640,
+            height: 480,
+            quality: 30,
             compute_parameters,
         },
         1,
@@ -36,7 +45,8 @@ fn make_image() -> String {
     let mut buff = Vec::new();
     img.write_to(&mut Cursor::new(&mut buff), image::ImageOutputFormat::Png)
         .unwrap();
-    let b64 = BASE64_URL_SAFE_NO_PAD.encode(&buff);
+    std::fs::write("../../test.png", &buff).unwrap();
+    let b64 = BASE64_STANDARD_NO_PAD.encode(&buff);
     format!("data:image/png;base64,{}", b64)
 }
 
@@ -65,3 +75,5 @@ fn main() {
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
+
+// <img alt="Image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAEElEQVR4AQEFAPr_AAAAAP8BBAEAeX5eMQAAAABJRU5ErkJggg">
