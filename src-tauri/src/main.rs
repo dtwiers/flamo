@@ -8,6 +8,8 @@ use tauri::{AboutMetadata, Menu, MenuItem, Submenu};
 use crate::fractal::{ComputeParameters, RenderParameters};
 use base64::prelude::*;
 mod fractal;
+mod application;
+mod commands;
 #[macro_use]
 extern crate log;
 
@@ -64,6 +66,7 @@ fn main() {
                 .license("GPL"),
         )),
     );
+
 
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![greet, make_image])

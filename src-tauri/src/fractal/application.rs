@@ -1,14 +1,13 @@
-use crossbeam::channel::unbounded;
 use image::RgbaImage;
 use rand::{thread_rng, Rng};
-use std::{sync::Arc, thread, collections::VecDeque};
+use std::{sync::Arc, collections::VecDeque};
 
 use super::{image_matrix::ImageMatrix, render::RenderParameters, Color, Point};
 
-pub fn render_image(
+pub async fn render_image<F: FnMut(u16) + Send>(
     render_parameters: &RenderParameters,
     thread_count: u32,
-    update_progress: Box<dyn Fn(u16) + Send>,
+    update_progress: &mut F,
 ) -> Result<RgbaImage, String> {
     let render_parameters = Arc::new(render_parameters.clone());
     // let (tx, rx) = unbounded();
