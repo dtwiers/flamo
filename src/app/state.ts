@@ -1,5 +1,4 @@
-import { invoke } from "@tauri-apps/api/tauri";
-import { createSignal } from "solid-js";
+// import { invoke } from "@tauri-apps/api/tauri";
 import { createStore, produce } from "solid-js/store";
 import { v4 as uuidv4 } from "uuid";
 import { ComputeParameters, RenderParameters } from "./state.types";
@@ -17,14 +16,16 @@ export type ProjectState = {
 
 export type ProjectStatus = "not_started" | "in_progress" | "complete";
 
+// LATER
 export type RecentProject = {
     name: string;
     path: string;
 };
 
 export type AppState = {
-    projects: ProjectState[];
-    currentProject: ProjectState;
+    projects: EntityState<ProjectState>;
+    currentProjectId: string | null;
+    readonly currentProject: ProjectState | null;
 };
 
 export type EntityId = string;
@@ -34,18 +35,25 @@ export type EntityState<T> = {
     ids: EntityId[];
 };
 
-export const [projects, setProjects] = createStore<EntityState<ProjectState>>({
-    entities: {},
-    ids: [],
+const appStore = createStore<AppState>({
+    projects: {
+        entities: {},
+        ids: [],
+    },
+    currentProjectId: null,
+    get currentProject() {
+        if (!this.currentProjectId) return null;
+        return this.projects.entities[this.currentProjectId];
+    },
 });
-export const [currentProjectId, setCurrentProjectId] = createSignal<
-    string | null
->(null);
+
+export const appState = appStore[0];
+const setAppState = appStore[1];
 
 export const createNewProject = async () => {
     const project: ProjectState = {
         name: "New Project",
-        id: uuidv4.generate(),
+        id: uuidv4(),
         temp_path: null,
         saved_project_path: null,
         is_dirty: false,
@@ -54,29 +62,25 @@ export const createNewProject = async () => {
         renderParameters: {} as any,
         status: "not_started",
     };
-    setProjects(
+    setAppState(
         produce((state) => {
-            state.entities[project.id] = project;
-            state.ids.push(project.id);
+            state.projects.entities[project.id] = project;
+            state.projects.ids.push(project.id);
+            state.currentProjectId = project.id;
         })
     );
-
-    // const _server_project = await invoke<ProjectState>("create_new_project", {
-    //     project,
-    // });
-    setCurrentProjectId(project.id);
 };
 
 export const closeProject = async (projectId: string) => {
-    setProjects(
+    setAppState(
         produce((state) => {
-            delete state.entities[projectId];
-            state.ids = state.ids.filter((id) => id !== projectId);
+            delete state.projects.entities[projectId];
+            state.projects.ids = state.projects.ids.filter((id) => id !== projectId);
+            if (state.currentProjectId === projectId) {
+                state.currentProjectId = state.projects.ids.length > 0 ? state.projects.ids[state.projects.ids.length - 1] : null;
+            }
         })
     );
-    if (currentProjectId() === projectId) {
-        setCurrentProjectId(projects.ids.length > 0 ? projects.ids[0] : null);
-    }
 };
 
 export const modifyVariationValue = <
@@ -89,9 +93,9 @@ export const modifyVariationValue = <
     key2: K2,
     value: V
 ) => {
-    setProjects(
+    setAppState(
         produce((state) => {
-            state.entities[projectId].renderParameters.computeParameters[key][
+            state.projects.entities[projectId].renderParameters.computeParameters[key][
                 key2
             ] = value;
         })
