@@ -122,6 +122,7 @@ export const createAppState = () => {
 
     return {
         appState,
+        setAppState,
         createNewProject,
         selectProject,
         closeProject,
