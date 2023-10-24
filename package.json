@@ -21,6 +21,7 @@
     "@tauri-apps/cli": "^1.5.0",
     "@types/uuid": "^9.0.6",
     "typescript": "^5.0.2",
+    "typescript-plugin-css-modules": "^5.0.2",
     "vite": "^4.4.4",
     "vite-plugin-solid": "^2.7.0"
   }

@@ -1,0 +1,22 @@
+
+.tabbedContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+.navTabs {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    height: 40px;
+    width: 100%;
+    background-color: #aaaaaa;
+    border-bottom: 1px solid #444;
+}
+
+.active {
+    background-color: blue;
+}

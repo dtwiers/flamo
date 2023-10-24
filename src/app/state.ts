@@ -36,71 +36,96 @@ export type EntityState<T> = {
     ids: EntityId[];
 };
 
-const appStore = createStore<AppState>({
-    projects: {
-        entities: {},
-        ids: [],
-    },
-    currentProjectId: null,
-    get currentProject() {
-        if (!this.currentProjectId) return null;
-        return this.projects.entities[this.currentProjectId];
-    },
-});
+export const createAppState = () => {
+    const [appState, setAppState] = createStore<AppState>({
+        projects: {
+            entities: {},
+            ids: [],
+        },
+        currentProjectId: null,
+        get currentProject() {
+            if (!this.currentProjectId) return null;
+            return this.projects.entities[this.currentProjectId];
+        },
+    });
 
-export const appState = appStore[0];
-const setAppState = appStore[1];
-
-export const createNewProject = async () => {
-    const project: ProjectState = {
-        name: "New Project",
-        id: uuidv4(),
-        temp_path: null,
-        saved_project_path: null,
-        is_dirty: false,
-        progress: null,
-        // TODO
-        renderParameters: {} as any,
-        status: "not_started",
+    const createNewProject = async () => {
+        console.log("createNewProject");
+        const project: ProjectState = {
+            name: "New Project",
+            id: uuidv4(),
+            temp_path: null,
+            saved_project_path: null,
+            is_dirty: false,
+            progress: null,
+            // TODO
+            renderParameters: {} as any,
+            status: "not_started",
+        };
+        setAppState(
+            produce((state) => {
+                state.projects.entities[project.id] = project;
+                state.projects.ids.push(project.id);
+                state.currentProjectId = project.id;
+            }),
+        );
     };
-    setAppState(
-        produce((state) => {
-            state.projects.entities[project.id] = project;
-            state.projects.ids.push(project.id);
-            state.currentProjectId = project.id;
-        })
-    );
-};
 
-export const closeProject = async (projectId: string) => {
-    setAppState(
-        produce((state) => {
-            delete state.projects.entities[projectId];
-            state.projects.ids = state.projects.ids.filter((id) => id !== projectId);
-            if (state.currentProjectId === projectId) {
-                state.currentProjectId = state.projects.ids.length > 0 ? state.projects.ids[state.projects.ids.length - 1] : null;
-            }
-        })
-    );
-};
+    const closeProject = async (projectId: string) => {
+        setAppState(
+            produce((state) => {
+                delete state.projects.entities[projectId];
+                state.projects.ids = state.projects.ids.filter(
+                    (id) => id !== projectId,
+                );
+                if (state.currentProjectId === projectId) {
+                    state.currentProjectId =
+                        state.projects.ids.length > 0
+                            ? state.projects.ids[state.projects.ids.length - 1]
+                            : null;
+                }
+            }),
+        );
+    };
 
-export const modifyVariationValue = <
-    K extends keyof ComputeParameters,
-    K2 extends keyof ComputeParameters[K],
-    V extends ComputeParameters[K][K2]
->(
-    projectId: string,
-    key: K,
-    key2: K2,
-    value: V
-) => {
-    setAppState(
-        produce((state) => {
-            state.projects.entities[projectId].renderParameters.computeParameters[key][
-                key2
-            ] = value;
-        })
-    );
-};
+    const modifyVariationValue = <
+        K extends keyof ComputeParameters,
+        K2 extends keyof ComputeParameters[K],
+        V extends ComputeParameters[K][K2],
+    >(
+        projectId: string,
+        key: K,
+        key2: K2,
+        value: V,
+    ) => {
+        setAppState(
+            produce((state) => {
+                state.projects.entities[
+                    projectId
+                ].renderParameters.computeParameters[key][key2] = value;
+            }),
+        );
+    };
 
-export const modifyComputeParameters = makeComputeParametersUpdates(appState, setAppState);
+    const modifyComputeParameters = makeComputeParametersUpdates(
+        appState,
+        setAppState,
+    );
+
+    const selectProject = (projectId: string) => {
+        setAppState(
+            produce((state) => {
+                state.currentProjectId = projectId;
+            }),
+        );
+    }
+
+    return {
+        appState,
+        createNewProject,
+        selectProject,
+        closeProject,
+        modifyVariationValue,
+        modifyComputeParameters,
+    };
+};
