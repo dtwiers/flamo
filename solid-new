@@ -1,0 +1,28 @@
+#!/usr/bin/env sh
+
+# component name from positional argument
+component=$1
+
+# get last segment after slash
+component_name=${component##*/}
+pascal_name=$(echo "$component_name" | sed 's/-/ /g' | awk '{ for(i=1; i<=NF; i++) $i=toupper(substr($i,1,1)) tolower(substr($i,2)); }1' | sed 's/ //g')
+
+
+# cd into src/components
+cd src/components
+
+# create component folder
+mkdir -p "${component}"
+
+cd "${component}"
+
+# create component files
+echo "export * from './${component_name}.component';" > index.ts
+printf "import type { ${pascal_name}Props } from './${component_name}.types.ts'\n\nexport const ${pascal_name} = (props: ${pascal_name}Props) => {\n    return (<div>hello</div>);\n}" > "${component-name}.component.tsx"
+
+echo "export type ${pascal_name}Props = {};" > "${component_name}.component.tsx"
+echo "" >> "${component_name}.component.tsx"
+echo "export const ${pascal_name} = (props: ${pascal_name}Props) => {" >> "${component_name}.component.tsx"
+echo "    return (<div>hello</div>);" >> "${component_name}.component.tsx"
+echo "}" >> "${component_name}.component.tsx"
+

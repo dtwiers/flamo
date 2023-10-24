@@ -2,6 +2,7 @@
 import { createStore, produce } from "solid-js/store";
 import { v4 as uuidv4 } from "uuid";
 import { ComputeParameters, RenderParameters } from "./state.types";
+import { makeComputeParametersUpdates } from "./compute-parameters";
 
 export type ProjectState = {
     name: string;
@@ -101,3 +102,5 @@ export const modifyVariationValue = <
         })
     );
 };
+
+export const modifyComputeParameters = makeComputeParametersUpdates(appState, setAppState);
