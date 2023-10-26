@@ -1,21 +1,25 @@
 .tabButton {
-    padding: 3px;
+    padding: 6px;
+    height: 40px;
     display: flex;
     flex-direction: row;
     justify-items: center;
     align-items: center;
     border: none;
+    border-radius: 6px;
+    color: #444
 }
 
 .tabButton.active {
     flex-shrink: 0;
     padding-right: 38px;
-    background-color: #ddd;
+    background-color: #DD9900;
+    color: #000;
 }
 
 .tab {
     padding: 0;
-    height: 30px;
+    height: 40px;
     position: relative;
 }
 
@@ -27,10 +31,11 @@
     height: 30px;
     width: 30px;
     position: absolute;
-    top: 5px;
-    right: 2px;
+    top: 6px;
+    right: 5px;
     background-color: transparent;
     border: none;
+    border-radius: 6px;
 }
 
 .tabClose:hover {

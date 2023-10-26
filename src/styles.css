@@ -10,12 +10,35 @@
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
+  /* -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%; */
+  margin: 0;
+  padding: 0;
+
+}
+
+html {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    /* overflow: hidden; */
 }
 
 body {
     padding: 0;
     margin: 0;
+    height: 100%;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+main {
+    height: 100vh;
+}
+
+* {
+    box-sizing: border-box;
 }

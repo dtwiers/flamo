@@ -18,11 +18,13 @@ cd "${component}"
 
 # create component files
 echo "export * from './${component_name}.component';" > index.ts
-printf "import type { ${pascal_name}Props } from './${component_name}.types.ts'\n\nexport const ${pascal_name} = (props: ${pascal_name}Props) => {\n    return (<div>hello</div>);\n}" > "${component-name}.component.tsx"
 
-echo "export type ${pascal_name}Props = {};" > "${component_name}.component.tsx"
+echo "import styles from './${component_name}.module.css';" > "${component_name}.component.tsx"
+echo "" >> "${component_name}.component.tsx"
+echo "export type ${pascal_name}Props = {};" >> "${component_name}.component.tsx"
 echo "" >> "${component_name}.component.tsx"
 echo "export const ${pascal_name} = (props: ${pascal_name}Props) => {" >> "${component_name}.component.tsx"
 echo "    return (<div>hello</div>);" >> "${component_name}.component.tsx"
 echo "}" >> "${component_name}.component.tsx"
 
+touch "${component_name}.module.css"

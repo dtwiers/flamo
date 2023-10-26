@@ -8,16 +8,28 @@
 
 .navTabs {
     display: flex;
+    padding-left: 10px;
+    padding-top: 10px;
     gap: 8px;
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-    height: 40px;
     width: 100%;
-    background-color: #aaaaaa;
-    border-bottom: 1px solid #444;
 }
 
 .active {
     background-color: blue;
 }
+
+.addButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 6px;
+    background-color: rgba(20, 140, 90, 0.9);
+    backdrop-filter: blur(10px);
+    height: 40px;
+    width: 40px;
+}
+
