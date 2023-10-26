@@ -3,7 +3,7 @@ import styles from "./main-window.module.css";
 import placeholder from "../../assets/placeholder.jpeg";
 import { SidepanelEditor } from "../sidepanel-editor";
 import { createSignal, onMount } from "solid-js";
-import { clamp } from "../../util/math";
+import { clamp, singleSnap } from "../../util/math";
 
 export type MainWindowProps = {
     project: ProjectState | null;
@@ -16,7 +16,13 @@ export const MainWindow = (props: MainWindowProps) => {
         const SCALE_FACTOR = 0.0015;
         previewWindow!.addEventListener("wheel", (e) => {
             e.preventDefault();
-            setScale(s => clamp(s * (1 - SCALE_FACTOR * e.deltaY), 0.01, 10));
+            setScale((s) => {
+                const clamped = clamp(s * (1 - SCALE_FACTOR * e.deltaY), 0.01, 10);
+                if (singleSnap(s, 1, 0.06) === 1) {
+                    return clamped;
+                }
+                return singleSnap(clamped, 1, 0.06);
+            });
         });
     });
     return (
