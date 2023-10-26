@@ -1,5 +1,5 @@
 import { ParentComponent, createContext, createEffect, useContext } from "solid-js";
-import { createAppState } from "../../app";
+import { createAppState } from "../../app/state";
 
 export type StateProviderProps = {};
 

@@ -74,14 +74,13 @@ export const createAppState = () => {
     const closeProject = async (projectId: string) => {
         setAppState(
             produce((state) => {
+                const index = state.projects.ids.indexOf(projectId);
                 delete state.projects.entities[projectId];
-                state.projects.ids = state.projects.ids.filter(
-                    (id) => id !== projectId,
-                );
+                state.projects.ids = state.projects.ids.filter((id) => id !== projectId);
                 if (state.currentProjectId === projectId) {
                     state.currentProjectId =
                         state.projects.ids.length > 0
-                            ? state.projects.ids[state.projects.ids.length - 1]
+                            ? state.projects.ids[Math.min(index, state.projects.ids.length - 1)]
                             : null;
                 }
             }),
@@ -100,17 +99,13 @@ export const createAppState = () => {
     ) => {
         setAppState(
             produce((state) => {
-                state.projects.entities[
-                    projectId
-                ].renderParameters.computeParameters[key][key2] = value;
+                state.projects.entities[projectId].renderParameters.computeParameters[key][key2] =
+                    value;
             }),
         );
     };
 
-    const modifyComputeParameters = makeComputeParametersUpdates(
-        appState,
-        setAppState,
-    );
+    const modifyComputeParameters = makeComputeParametersUpdates(appState, setAppState);
 
     const selectProject = (projectId: string) => {
         setAppState(
@@ -118,7 +113,7 @@ export const createAppState = () => {
                 state.currentProjectId = projectId;
             }),
         );
-    }
+    };
 
     return {
         appState,

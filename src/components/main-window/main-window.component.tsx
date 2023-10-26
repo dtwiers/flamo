@@ -1,8 +1,9 @@
-import { ProjectState } from "../../app";
+import type { ProjectState } from "../../app/state";
 import styles from "./main-window.module.css";
 import placeholder from "../../assets/placeholder.jpeg";
 import { SidepanelEditor } from "../sidepanel-editor";
 import { createSignal, onMount } from "solid-js";
+import { clamp } from "../../util/math";
 
 export type MainWindowProps = {
     project: ProjectState | null;
@@ -12,14 +13,10 @@ export const MainWindow = (props: MainWindowProps) => {
     let previewWindow: HTMLDivElement | undefined = undefined;
     const [scale, setScale] = createSignal(1);
     onMount(() => {
-        const SCALE_FACTOR = 0.1;
+        const SCALE_FACTOR = 0.0015;
         previewWindow!.addEventListener("wheel", (e) => {
             e.preventDefault();
-            if (e.deltaY > 0) {
-                setScale(scale() * (1 - SCALE_FACTOR));
-            } else {
-                setScale(scale() * (1 + SCALE_FACTOR));
-            }
+            setScale(s => clamp(s * (1 - SCALE_FACTOR * e.deltaY), 0.01, 10));
         });
     });
     return (
