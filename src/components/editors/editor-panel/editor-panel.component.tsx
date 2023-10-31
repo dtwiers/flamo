@@ -12,12 +12,14 @@ export const EditorPanel: ParentComponent<EditorPanelProps> = (props) => {
     return (
         <div class={styles.container} classList={{ [styles.collapsed]: isCollapsed() }}>
             <div class={styles.header}>
-                <h3>{props.title}</h3>
-                <button type="button" onClick={() => setIsCollapsed((c) => !c)}>
-                    {collapseText()} {collapseIcon()}
+                <h3 class={styles.title}>{props.title}</h3>
+                <button class={styles.collapseButton} type="button" onClick={() => setIsCollapsed((c) => !c)}>
+                    {collapseIcon()}
+                    <span class="sr-only">{collapseText()}</span>
                 </button>
             </div>
-            <Show when={!isCollapsed()}>{props.children}</Show>
+            <Show when={!isCollapsed()}>
+                <div class={styles.content}>{props.children}</div></Show>
         </div>
     );
 };
