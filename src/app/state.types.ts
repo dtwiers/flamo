@@ -8,61 +8,60 @@ export type RenderParameters = {
 }
 
 export type ComputeParameters = {
-    // finalVariation: FinalVariation | null;
+    finalVariation: Variation;
     postTransform: Affine;
-    linear: Variation;
-    sinusoidal: Variation;
-    spherical: Variation;
-    swirl: Variation;
-    horseshoe: Variation;
-    polar: Variation;
-    handkerchief: Variation;
-    heart: Variation;
-    disc: Variation;
-    spiral: Variation;
-    hyperbolic: Variation;
-    diamond: Variation;
-    ex: Variation;
-    julia: Variation;
-    bent: Variation;
-    waves: Variation;
-    fisheye: Variation;
-    popcorn: Variation;
-    exponential: Variation;
-    power: Variation;
-    cosine: Variation;
-    rings: Variation;
-    fan: Variation;
-    blob: Variation<BlobParameters>;
-    pdj: Variation<PDJParameters>;
-    fan2: Variation<Fan2Parameters>;
-    rings2: Variation<Rings2Parameters>;
-    eyefish: Variation;
-    bubble: Variation;
-    cylinder: Variation;
-    perspective: Variation<PerspectiveParameters>;
-    noise: Variation;
-    juliaN: Variation<JuliaNParameters>;
-    juliaScope: Variation<JuliaScopeParameters>;
-    blur: Variation;
-    gaussianBlur: Variation;
-    radialBlur: Variation<RadialBlurParameters>;
-    pie: Variation<PieParameters>;
-    ngon: Variation<NgonParameters>;
-    curl: Variation<CurlParameters>;
-    rectangles: Variation<RectanglesParameters>;
-    arch: Variation;
-    tangent: Variation;
-    square: Variation;
-    rays: Variation;
-    blade: Variation;
-    secant: Variation;
-    twintrian: Variation;
-    cross: Variation;
-
-
-
+    variations: Variation[];
 }
+
+export type LinearVariation = Variation;
+export type SinusoidalVariation = Variation;
+export type SphericalVariation = Variation;
+export type SwirlVariation = Variation;
+export type HorseshoeVariation = Variation;
+export type PolarVariation = Variation;
+export type HandkerchiefVariation = Variation;
+export type HeartVariation = Variation;
+export type DiscVariation = Variation;
+export type SpiralVariation = Variation;
+export type HyperbolicVariation = Variation;
+export type DiamondVariation = Variation;
+export type ExVariation = Variation;
+export type JuliaVariation = Variation;
+export type BentVariation = Variation;
+export type WavesVariation = Variation;
+export type FisheyeVariation = Variation;
+export type PopcornVariation = Variation;
+export type ExponentialVariation = Variation;
+export type PowerVariation = Variation;
+export type CosineVariation = Variation;
+export type RingsVariation = Variation;
+export type FanVariation = Variation;
+export type BlobVariation = Variation<BlobParameters>;
+export type PdjVariation = Variation<PDJParameters>;
+export type Fan2Variation = Variation<Fan2Parameters>;
+export type Rings2Variation = Variation<Rings2Parameters>;
+export type EyefishVariation = Variation;
+export type BubbleVariation = Variation;
+export type CylinderVariation = Variation;
+export type PerspectiveVariation = Variation<PerspectiveParameters>;
+export type NoiseVariation = Variation;
+export type JuliaNVariation = Variation<JuliaNParameters>;
+export type JuliaScopeVariation = Variation<JuliaScopeParameters>;
+export type BlurVariation = Variation;
+export type GaussianBlurVariation = Variation;
+export type RadialBlurVariation = Variation<RadialBlurParameters>;
+export type PieVariation = Variation<PieParameters>;
+export type NgonVariation = Variation<NgonParameters>;
+export type CurlVariation = Variation<CurlParameters>;
+export type RectanglesVariation = Variation<RectanglesParameters>;
+export type ArchVariation = Variation;
+export type TangentVariation = Variation;
+export type SquareVariation = Variation;
+export type RaysVariation = Variation;
+export type BladeVariation = Variation;
+export type SecantVariation = Variation;
+export type TwintrianVariation = Variation;
+export type CrossVariation = Variation;
 
 export type Affine = {
     a: number;

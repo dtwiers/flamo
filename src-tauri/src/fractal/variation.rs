@@ -3,7 +3,7 @@ use num::Float;
 use super::{Point, Affine, Color};
 
 pub trait Variation<Scalar: Float> {
-    fn apply(&self, point: Point<Scalar>) -> Point<Scalar>;
+    fn apply(&self, point: &Point<Scalar>) -> Point<Scalar>;
     fn weight(&self) -> Scalar;
     fn affine(&self) -> Affine<Scalar>;
     fn name(&self) -> String;
@@ -29,7 +29,7 @@ macro_rules! variation {
                 self.color.clone()
             }
 
-            fn apply(&$self_, $point_: Point<$generic_type>) -> Point<$generic_type> {
+            fn apply(&$self_, $point_: &Point<$generic_type>) -> Point<$generic_type> {
                 $apply_body
             }
         }

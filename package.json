@@ -15,7 +15,8 @@
     "@tauri-apps/api": "^1.5.0",
     "rxjs": "^7.8.1",
     "solid-js": "^1.7.8",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.5.0",

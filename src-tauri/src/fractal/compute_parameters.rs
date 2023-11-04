@@ -1,5 +1,3 @@
-use core::panic;
-
 use num::Float;
 use rand::Rng;
 
@@ -7,62 +5,13 @@ use super::{variations::*, Affine, Variation};
 
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize, Default)]
 pub struct ComputeParameters<Scalar: Float> {
-    pub total_weight: Option<Scalar>,
-    pub final_variation: Option<FinalVariation<Scalar>>,
+    pub final_variation: Option<Variations<Scalar>>,
     pub post_transform: Affine<Scalar>,
-    pub linear: LinearVariation<Scalar>,
-    pub sinusoidal: SinusoidalVariation<Scalar>,
-    pub spherical: SphericalVariation<Scalar>,
-    pub swirl: SwirlVariation<Scalar>,
-    pub horseshoe: HorseshoeVariation<Scalar>,
-    pub polar: PolarVariation<Scalar>,
-    pub handkerchief: HandkerchiefVariation<Scalar>,
-    pub heart: HeartVariation<Scalar>,
-    pub disc: DiscVariation<Scalar>,
-    pub spiral: SpiralVariation<Scalar>,
-    pub hyperbolic: HyperbolicVariation<Scalar>,
-    pub diamond: DiamondVariation<Scalar>,
-    pub ex: ExVariation<Scalar>,
-    pub julia: JuliaVariation<Scalar>,
-    pub bent: BentVariation<Scalar>,
-    pub waves: WavesVariation<Scalar>,
-    pub fisheye: FisheyeVariation<Scalar>,
-    pub popcorn: PopcornVariation<Scalar>,
-    pub exponential: ExponentialVariation<Scalar>,
-    pub power: PowerVariation<Scalar>,
-    pub cosine: CosineVariation<Scalar>,
-    pub rings: RingsVariation<Scalar>,
-    pub fan: FanVariation<Scalar>,
-    pub blob: BlobVariation<Scalar>,
-    pub pdj: PDJVariation<Scalar>,
-    pub fan2: Fan2Variation<Scalar>,
-    pub rings2: Rings2Variation<Scalar>,
-    pub eyefish: EyefishVariation<Scalar>,
-    pub bubble: BubbleVariation<Scalar>,
-    pub cylinder: CylinderVariation<Scalar>,
-    pub perspective: PerspectiveVariation<Scalar>,
-    pub noise: NoiseVariation<Scalar>,
-    pub julia_n: JuliaNVariation<Scalar>,
-    pub julia_scope: JuliaScopeVariation<Scalar>,
-    pub blur: BlurVariation<Scalar>,
-    pub gaussian: GaussianVariation<Scalar>,
-    pub radial_blur: RadialBlurVariation<Scalar>,
-    pub pie: PieVariation<Scalar>,
-    pub ngon: NgonVariation<Scalar>,
-    pub curl: CurlVariation<Scalar>,
-    pub rectangles: RectanglesVariation<Scalar>,
-    pub arch: ArchVariation<Scalar>,
-    pub tangent: TangentVariation<Scalar>,
-    pub square: SquareVariation<Scalar>,
-    pub rays: RaysVariation<Scalar>,
-    pub blade: BladeVariation<Scalar>,
-    pub secant: SecantVariation<Scalar>,
-    pub twintrian: TwintrianVariation<Scalar>,
-    pub cross: CrossVariation<Scalar>,
+    pub variations: Vec<Variations<Scalar>>,
 }
 
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-pub enum FinalVariation<Scalar: Float> {
+pub enum Variations<Scalar: Float> {
     Linear(LinearVariation<Scalar>),
     Spherical(SphericalVariation<Scalar>),
     Swirl(SwirlVariation<Scalar>),
@@ -113,133 +62,290 @@ pub enum FinalVariation<Scalar: Float> {
     Cross(CrossVariation<Scalar>),
 }
 
-impl<Scalar: Float> ComputeParameters<Scalar> {
-    pub fn init_weight(&self) -> Self {
-        let mut total_weight = Scalar::zero();
-        total_weight = total_weight + self.linear.weight;
-        total_weight = total_weight + self.sinusoidal.weight;
-        total_weight = total_weight + self.spherical.weight;
-        total_weight = total_weight + self.swirl.weight;
-        total_weight = total_weight + self.horseshoe.weight;
-        total_weight = total_weight + self.polar.weight;
-        total_weight = total_weight + self.handkerchief.weight;
-        total_weight = total_weight + self.heart.weight;
-        total_weight = total_weight + self.disc.weight;
-        total_weight = total_weight + self.spiral.weight;
-        total_weight = total_weight + self.hyperbolic.weight;
-        total_weight = total_weight + self.diamond.weight;
-        total_weight = total_weight + self.ex.weight;
-        total_weight = total_weight + self.julia.weight;
-        total_weight = total_weight + self.bent.weight;
-        total_weight = total_weight + self.waves.weight;
-        total_weight = total_weight + self.fisheye.weight;
-        total_weight = total_weight + self.popcorn.weight;
-        total_weight = total_weight + self.exponential.weight;
-        total_weight = total_weight + self.power.weight;
-        total_weight = total_weight + self.cosine.weight;
-        total_weight = total_weight + self.rings.weight;
-        total_weight = total_weight + self.fan.weight;
-        total_weight = total_weight + self.blob.weight;
-        total_weight = total_weight + self.pdj.weight;
-        total_weight = total_weight + self.fan2.weight;
-        total_weight = total_weight + self.rings2.weight;
-        total_weight = total_weight + self.eyefish.weight;
-        total_weight = total_weight + self.bubble.weight;
-        total_weight = total_weight + self.cylinder.weight;
-        total_weight = total_weight + self.perspective.weight;
-        total_weight = total_weight + self.noise.weight;
-        total_weight = total_weight + self.julia_n.weight;
-        total_weight = total_weight + self.julia_scope.weight;
-        total_weight = total_weight + self.blur.weight;
-        total_weight = total_weight + self.gaussian.weight;
-        total_weight = total_weight + self.radial_blur.weight;
-        total_weight = total_weight + self.pie.weight;
-        total_weight = total_weight + self.ngon.weight;
-        total_weight = total_weight + self.curl.weight;
-        total_weight = total_weight + self.rectangles.weight;
-        total_weight = total_weight + self.arch.weight;
-        total_weight = total_weight + self.tangent.weight;
-        total_weight = total_weight + self.square.weight;
-        total_weight = total_weight + self.rays.weight;
-        total_weight = total_weight + self.blade.weight;
-        total_weight = total_weight + self.secant.weight;
-        total_weight = total_weight + self.twintrian.weight;
-        total_weight = total_weight + self.cross.weight;
-
-        let mut result = self.clone();
-        result.total_weight = Some(total_weight);
-        result
+impl<Scalar: Float> Variation<Scalar> for Variations<Scalar> {
+    fn apply(&self, point: &super::Point<Scalar>) -> super::Point<Scalar> {
+        match self {
+            Self::Linear(variation) => variation.apply(point),
+            Self::Spherical(variation) => variation.apply(point),
+            Self::Swirl(variation) => variation.apply(point),
+            Self::Horseshoe(variation) => variation.apply(point),
+            Self::Polar(variation) => variation.apply(point),
+            Self::Handkerchief(variation) => variation.apply(point),
+            Self::Heart(variation) => variation.apply(point),
+            Self::Disc(variation) => variation.apply(point),
+            Self::Spiral(variation) => variation.apply(point),
+            Self::Hyperbolic(variation) => variation.apply(point),
+            Self::Diamond(variation) => variation.apply(point),
+            Self::Ex(variation) => variation.apply(point),
+            Self::Julia(variation) => variation.apply(point),
+            Self::Bent(variation) => variation.apply(point),
+            Self::Waves(variation) => variation.apply(point),
+            Self::Fisheye(variation) => variation.apply(point),
+            Self::Popcorn(variation) => variation.apply(point),
+            Self::Exponential(variation) => variation.apply(point),
+            Self::Power(variation) => variation.apply(point),
+            Self::Cosine(variation) => variation.apply(point),
+            Self::Rings(variation) => variation.apply(point),
+            Self::Fan(variation) => variation.apply(point),
+            Self::Blob(variation) => variation.apply(point),
+            Self::Pdj(variation) => variation.apply(point),
+            Self::Fan2(variation) => variation.apply(point),
+            Self::Rings2(variation) => variation.apply(point),
+            Self::Eyefish(variation) => variation.apply(point),
+            Self::Bubble(variation) => variation.apply(point),
+            Self::Cylinder(variation) => variation.apply(point),
+            Self::Perspective(variation) => variation.apply(point),
+            Self::Noise(variation) => variation.apply(point),
+            Self::JuliaN(variation) => variation.apply(point),
+            Self::JuliaScope(variation) => variation.apply(point),
+            Self::Blur(variation) => variation.apply(point),
+            Self::Gaussian(variation) => variation.apply(point),
+            Self::RadialBlur(variation) => variation.apply(point),
+            Self::Pie(variation) => variation.apply(point),
+            Self::Ngon(variation) => variation.apply(point),
+            Self::Curl(variation) => variation.apply(point),
+            Self::Rectangles(variation) => variation.apply(point),
+            Self::Arch(variation) => variation.apply(point),
+            Self::Tangent(variation) => variation.apply(point),
+            Self::Square(variation) => variation.apply(point),
+            Self::Rays(variation) => variation.apply(point),
+            Self::Blade(variation) => variation.apply(point),
+            Self::Secant(variation) => variation.apply(point),
+            Self::Twintrian(variation) => variation.apply(point),
+            Self::Cross(variation) => variation.apply(point),
+        }
     }
 
-    pub fn choose(&self) -> Box<&dyn Variation<Scalar>> {
-        let mut rng = rand::thread_rng();
-        let variation = [
-            &self.linear as &dyn Variation<Scalar>,
-            &self.sinusoidal as &dyn Variation<Scalar>,
-            &self.spherical as &dyn Variation<Scalar>,
-            &self.swirl as &dyn Variation<Scalar>,
-            &self.horseshoe as &dyn Variation<Scalar>,
-            &self.polar as &dyn Variation<Scalar>,
-            &self.handkerchief as &dyn Variation<Scalar>,
-            &self.heart as &dyn Variation<Scalar>,
-            &self.disc as &dyn Variation<Scalar>,
-            &self.spiral as &dyn Variation<Scalar>,
-            &self.hyperbolic as &dyn Variation<Scalar>,
-            &self.diamond as &dyn Variation<Scalar>,
-            &self.ex as &dyn Variation<Scalar>,
-            &self.julia as &dyn Variation<Scalar>,
-            &self.bent as &dyn Variation<Scalar>,
-            &self.waves as &dyn Variation<Scalar>,
-            &self.fisheye as &dyn Variation<Scalar>,
-            &self.popcorn as &dyn Variation<Scalar>,
-            &self.exponential as &dyn Variation<Scalar>,
-            &self.power as &dyn Variation<Scalar>,
-            &self.cosine as &dyn Variation<Scalar>,
-            &self.rings as &dyn Variation<Scalar>,
-            &self.fan as &dyn Variation<Scalar>,
-            &self.blob as &dyn Variation<Scalar>,
-            &self.pdj as &dyn Variation<Scalar>,
-            &self.fan2 as &dyn Variation<Scalar>,
-            &self.rings2 as &dyn Variation<Scalar>,
-            &self.eyefish as &dyn Variation<Scalar>,
-            &self.bubble as &dyn Variation<Scalar>,
-            &self.cylinder as &dyn Variation<Scalar>,
-            &self.perspective as &dyn Variation<Scalar>,
-            &self.noise as &dyn Variation<Scalar>,
-            &self.julia_n as &dyn Variation<Scalar>,
-            &self.julia_scope as &dyn Variation<Scalar>,
-            &self.blur as &dyn Variation<Scalar>,
-            &self.gaussian as &dyn Variation<Scalar>,
-            &self.radial_blur as &dyn Variation<Scalar>,
-            &self.pie as &dyn Variation<Scalar>,
-            &self.ngon as &dyn Variation<Scalar>,
-            &self.curl as &dyn Variation<Scalar>,
-            &self.rectangles as &dyn Variation<Scalar>,
-            &self.arch as &dyn Variation<Scalar>,
-            &self.tangent as &dyn Variation<Scalar>,
-            &self.square as &dyn Variation<Scalar>,
-            &self.rays as &dyn Variation<Scalar>,
-            &self.blade as &dyn Variation<Scalar>,
-            &self.secant as &dyn Variation<Scalar>,
-            &self.twintrian as &dyn Variation<Scalar>,
-            &self.cross as &dyn Variation<Scalar>,
-        ];
+    fn weight(&self) -> Scalar {
+        match self {
+            Self::Linear(variation) => variation.weight(),
+            Self::Spherical(variation) => variation.weight(),
+            Self::Swirl(variation) => variation.weight(),
+            Self::Horseshoe(variation) => variation.weight(),
+            Self::Polar(variation) => variation.weight(),
+            Self::Handkerchief(variation) => variation.weight(),
+            Self::Heart(variation) => variation.weight(),
+            Self::Disc(variation) => variation.weight(),
+            Self::Spiral(variation) => variation.weight(),
+            Self::Hyperbolic(variation) => variation.weight(),
+            Self::Diamond(variation) => variation.weight(),
+            Self::Ex(variation) => variation.weight(),
+            Self::Julia(variation) => variation.weight(),
+            Self::Bent(variation) => variation.weight(),
+            Self::Waves(variation) => variation.weight(),
+            Self::Fisheye(variation) => variation.weight(),
+            Self::Popcorn(variation) => variation.weight(),
+            Self::Exponential(variation) => variation.weight(),
+            Self::Power(variation) => variation.weight(),
+            Self::Cosine(variation) => variation.weight(),
+            Self::Rings(variation) => variation.weight(),
+            Self::Fan(variation) => variation.weight(),
+            Self::Blob(variation) => variation.weight(),
+            Self::Pdj(variation) => variation.weight(),
+            Self::Fan2(variation) => variation.weight(),
+            Self::Rings2(variation) => variation.weight(),
+            Self::Eyefish(variation) => variation.weight(),
+            Self::Bubble(variation) => variation.weight(),
+            Self::Cylinder(variation) => variation.weight(),
+            Self::Perspective(variation) => variation.weight(),
+            Self::Noise(variation) => variation.weight(),
+            Self::JuliaN(variation) => variation.weight(),
+            Self::JuliaScope(variation) => variation.weight(),
+            Self::Blur(variation) => variation.weight(),
+            Self::Gaussian(variation) => variation.weight(),
+            Self::RadialBlur(variation) => variation.weight(),
+            Self::Pie(variation) => variation.weight(),
+            Self::Ngon(variation) => variation.weight(),
+            Self::Curl(variation) => variation.weight(),
+            Self::Rectangles(variation) => variation.weight(),
+            Self::Arch(variation) => variation.weight(),
+            Self::Tangent(variation) => variation.weight(),
+            Self::Square(variation) => variation.weight(),
+            Self::Rays(variation) => variation.weight(),
+            Self::Blade(variation) => variation.weight(),
+            Self::Secant(variation) => variation.weight(),
+            Self::Twintrian(variation) => variation.weight(),
+            Self::Cross(variation) => variation.weight(),
+        }
+    }
 
-        if self.total_weight.is_none() {
-            panic!("total_weight is None");
+    fn affine(&self) -> Affine<Scalar> {
+        match self {
+            Self::Linear(variation) => variation.affine(),
+            Self::Spherical(variation) => variation.affine(),
+            Self::Swirl(variation) => variation.affine(),
+            Self::Horseshoe(variation) => variation.affine(),
+            Self::Polar(variation) => variation.affine(),
+            Self::Handkerchief(variation) => variation.affine(),
+            Self::Heart(variation) => variation.affine(),
+            Self::Disc(variation) => variation.affine(),
+            Self::Spiral(variation) => variation.affine(),
+            Self::Hyperbolic(variation) => variation.affine(),
+            Self::Diamond(variation) => variation.affine(),
+            Self::Ex(variation) => variation.affine(),
+            Self::Julia(variation) => variation.affine(),
+            Self::Bent(variation) => variation.affine(),
+            Self::Waves(variation) => variation.affine(),
+            Self::Fisheye(variation) => variation.affine(),
+            Self::Popcorn(variation) => variation.affine(),
+            Self::Exponential(variation) => variation.affine(),
+            Self::Power(variation) => variation.affine(),
+            Self::Cosine(variation) => variation.affine(),
+            Self::Rings(variation) => variation.affine(),
+            Self::Fan(variation) => variation.affine(),
+            Self::Blob(variation) => variation.affine(),
+            Self::Pdj(variation) => variation.affine(),
+            Self::Fan2(variation) => variation.affine(),
+            Self::Rings2(variation) => variation.affine(),
+            Self::Eyefish(variation) => variation.affine(),
+            Self::Bubble(variation) => variation.affine(),
+            Self::Cylinder(variation) => variation.affine(),
+            Self::Perspective(variation) => variation.affine(),
+            Self::Noise(variation) => variation.affine(),
+            Self::JuliaN(variation) => variation.affine(),
+            Self::JuliaScope(variation) => variation.affine(),
+            Self::Blur(variation) => variation.affine(),
+            Self::Gaussian(variation) => variation.affine(),
+            Self::RadialBlur(variation) => variation.affine(),
+            Self::Pie(variation) => variation.affine(),
+            Self::Ngon(variation) => variation.affine(),
+            Self::Curl(variation) => variation.affine(),
+            Self::Rectangles(variation) => variation.affine(),
+            Self::Arch(variation) => variation.affine(),
+            Self::Tangent(variation) => variation.affine(),
+            Self::Square(variation) => variation.affine(),
+            Self::Rays(variation) => variation.affine(),
+            Self::Blade(variation) => variation.affine(),
+            Self::Secant(variation) => variation.affine(),
+            Self::Twintrian(variation) => variation.affine(),
+            Self::Cross(variation) => variation.affine(),
+        }
+    }
+
+    fn name(&self) -> String {
+        match self {
+            Self::Linear(variation) => variation.name(),
+            Self::Spherical(variation) => variation.name(),
+            Self::Swirl(variation) => variation.name(),
+            Self::Horseshoe(variation) => variation.name(),
+            Self::Polar(variation) => variation.name(),
+            Self::Handkerchief(variation) => variation.name(),
+            Self::Heart(variation) => variation.name(),
+            Self::Disc(variation) => variation.name(),
+            Self::Spiral(variation) => variation.name(),
+            Self::Hyperbolic(variation) => variation.name(),
+            Self::Diamond(variation) => variation.name(),
+            Self::Ex(variation) => variation.name(),
+            Self::Julia(variation) => variation.name(),
+            Self::Bent(variation) => variation.name(),
+            Self::Waves(variation) => variation.name(),
+            Self::Fisheye(variation) => variation.name(),
+            Self::Popcorn(variation) => variation.name(),
+            Self::Exponential(variation) => variation.name(),
+            Self::Power(variation) => variation.name(),
+            Self::Cosine(variation) => variation.name(),
+            Self::Rings(variation) => variation.name(),
+            Self::Fan(variation) => variation.name(),
+            Self::Blob(variation) => variation.name(),
+            Self::Pdj(variation) => variation.name(),
+            Self::Fan2(variation) => variation.name(),
+            Self::Rings2(variation) => variation.name(),
+            Self::Eyefish(variation) => variation.name(),
+            Self::Bubble(variation) => variation.name(),
+            Self::Cylinder(variation) => variation.name(),
+            Self::Perspective(variation) => variation.name(),
+            Self::Noise(variation) => variation.name(),
+            Self::JuliaN(variation) => variation.name(),
+            Self::JuliaScope(variation) => variation.name(),
+            Self::Blur(variation) => variation.name(),
+            Self::Gaussian(variation) => variation.name(),
+            Self::RadialBlur(variation) => variation.name(),
+            Self::Pie(variation) => variation.name(),
+            Self::Ngon(variation) => variation.name(),
+            Self::Curl(variation) => variation.name(),
+            Self::Rectangles(variation) => variation.name(),
+            Self::Arch(variation) => variation.name(),
+            Self::Tangent(variation) => variation.name(),
+            Self::Square(variation) => variation.name(),
+            Self::Rays(variation) => variation.name(),
+            Self::Blade(variation) => variation.name(),
+            Self::Secant(variation) => variation.name(),
+            Self::Twintrian(variation) => variation.name(),
+            Self::Cross(variation) => variation.name(),
+        }
+    }
+
+    fn color(&self) -> super::Color<Scalar> {
+        match self {
+            Self::Linear(variation) => variation.color(),
+            Self::Spherical(variation) => variation.color(),
+            Self::Swirl(variation) => variation.color(),
+            Self::Horseshoe(variation) => variation.color(),
+            Self::Polar(variation) => variation.color(),
+            Self::Handkerchief(variation) => variation.color(),
+            Self::Heart(variation) => variation.color(),
+            Self::Disc(variation) => variation.color(),
+            Self::Spiral(variation) => variation.color(),
+            Self::Hyperbolic(variation) => variation.color(),
+            Self::Diamond(variation) => variation.color(),
+            Self::Ex(variation) => variation.color(),
+            Self::Julia(variation) => variation.color(),
+            Self::Bent(variation) => variation.color(),
+            Self::Waves(variation) => variation.color(),
+            Self::Fisheye(variation) => variation.color(),
+            Self::Popcorn(variation) => variation.color(),
+            Self::Exponential(variation) => variation.color(),
+            Self::Power(variation) => variation.color(),
+            Self::Cosine(variation) => variation.color(),
+            Self::Rings(variation) => variation.color(),
+            Self::Fan(variation) => variation.color(),
+            Self::Blob(variation) => variation.color(),
+            Self::Pdj(variation) => variation.color(),
+            Self::Fan2(variation) => variation.color(),
+            Self::Rings2(variation) => variation.color(),
+            Self::Eyefish(variation) => variation.color(),
+            Self::Bubble(variation) => variation.color(),
+            Self::Cylinder(variation) => variation.color(),
+            Self::Perspective(variation) => variation.color(),
+            Self::Noise(variation) => variation.color(),
+            Self::JuliaN(variation) => variation.color(),
+            Self::JuliaScope(variation) => variation.color(),
+            Self::Blur(variation) => variation.color(),
+            Self::Gaussian(variation) => variation.color(),
+            Self::RadialBlur(variation) => variation.color(),
+            Self::Pie(variation) => variation.color(),
+            Self::Ngon(variation) => variation.color(),
+            Self::Curl(variation) => variation.color(),
+            Self::Rectangles(variation) => variation.color(),
+            Self::Arch(variation) => variation.color(),
+            Self::Tangent(variation) => variation.color(),
+            Self::Square(variation) => variation.color(),
+            Self::Rays(variation) => variation.color(),
+            Self::Blade(variation) => variation.color(),
+            Self::Secant(variation) => variation.color(),
+            Self::Twintrian(variation) => variation.color(),
+            Self::Cross(variation) => variation.color(),
+        }
+    }
+}
+
+impl ComputeParameters<f64> {
+    pub fn choose(&self) -> Option<&Variations<f64>> {
+        let mut rng = rand::thread_rng();
+        let total_weight = self.variations.iter().map(|x| x.weight()).sum();
+        if total_weight == 0f64 {
+            return None;
         }
 
-        let total_weight = self.total_weight.unwrap();
+        let chosen_weight = rng.gen_range(0.0..(total_weight));
+        let mut current_weight = chosen_weight;
 
-        let chosen_weight = rng.gen_range(0.0..(total_weight.to_f64().unwrap()));
-        let mut current_weight = Scalar::from(chosen_weight).unwrap();
-
-        for variation in variation.iter() {
+        for variation in self.variations.iter() {
             current_weight = current_weight - variation.weight();
-            if current_weight <= Scalar::zero() {
-                return Box::new(*variation);
+            if current_weight <= 0f64 {
+                return Some(variation);
             }
         }
-        return Box::new(variation.last().map(|x| *x).unwrap());
+        return None;
     }
 }

@@ -1,6 +1,8 @@
 use image::RgbaImage;
 use rand::{thread_rng, Rng};
-use std::{sync::Arc, collections::VecDeque};
+use std::{collections::VecDeque, sync::Arc};
+
+use crate::fractal::Variation;
 
 use super::{image_matrix::ImageMatrix, render::RenderParameters, Color, Point};
 
@@ -79,21 +81,32 @@ fn init_point(render_parameters: &RenderParameters) -> Point<f64> {
 
 const ESCAPE_ITERATIONS: u32 = 1000;
 
-fn compute_point(render_parameters: &RenderParameters, point: Point<f64>, ignore_bounds: bool) -> Point<f64> {
+fn compute_point(
+    render_parameters: &RenderParameters,
+    point: Point<f64>,
+    ignore_bounds: bool,
+) -> Point<f64> {
     let mut new_point = point.clone();
     let mut counter = 0;
     trace!("Computing point");
     loop {
         counter += 1;
         let variation = render_parameters.compute_parameters.choose();
-        new_point = variation.affine().apply(&new_point);
-        new_point = variation.apply(new_point);
-        // todo: final variation
+        new_point = variation
+            .as_ref()
+            .map_or_else(|| new_point.clone(), |v| v.affine().apply(&new_point));
+        new_point = variation
+            .as_ref()
+            .map_or_else(|| new_point.clone(), |v| v.apply(&new_point));
+        // new_point = render_parameters
+        //     .compute_parameters
+        //     .final_variation
+        //     .map_or(new_point, |v| v.apply(new_point));
 
-        new_point = render_parameters
-            .compute_parameters
-            .post_transform
-            .apply(&new_point);
+        // new_point = render_parameters
+        //     .compute_parameters
+        //     .post_transform
+        //     .apply(&new_point);
         trace!("Point: {:?}", new_point);
         if ignore_bounds || new_point.is_in_bounds(super::BoundingBox::default()) {
             return new_point;

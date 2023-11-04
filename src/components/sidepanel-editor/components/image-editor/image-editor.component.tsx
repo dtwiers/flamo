@@ -12,9 +12,9 @@ export const ImageEditor = (props: ImageEditorProps) => {
 
     return (
         <EditorPanel title="Image Editor">
-            <NumberEditor label="Width" value={width()} setValue={setWidth} />
-            <NumberEditor label="Height" value={height()} setValue={setHeight} />
-            <NumberEditor label="Quality" value={quality()} setValue={setQuality} />
+            <NumberEditor label="Width" id="image-width" value={width()} setValue={setWidth} />
+            <NumberEditor label="Height" id="image-height" value={height()} setValue={setHeight} />
+            <NumberEditor label="Quality" id="image-quality" value={quality()} setValue={setQuality} />
             {/* <div class={styles.imageEditorRow}>
                 <label>Width</label>
                 <input type="number" />
